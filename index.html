@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Etch A Sketch</title>
+    <link href="style.css" type="text/css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Kulim+Park:400,700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="heading">
+        <h1>Etch A Sketch</h1>
+    </div>
+    <div class="mainBody">
+        <div class="controlsContainer">
+            <p>Sketch Grid Size: <span>Default Grid Size</span></p>
+            <button type="button" id="changeGridbtn">Change</button>
+            <span id="spanOne">1px</span>
+            <input type="range" id="gridRange" name="gridRange" min="1" max="50">
+            <span id="spanTwo">50px</span>
+            <button type="button" id="saveRange">Apply</button>
+            <p>Color: <span>Default Color</span></p>
+            <button type="button" id="changeColorbtn">Change</button>
+            <button type="button" id="blackbtn">Black</button>
+            <button type="button" id="randombtn">Random</button>
+            <button type="button" id="rainbowbtn">Rainbow</button>
+            <br>
+            <button type="button" id="clearbtn">Clear Grid</button>
+        </div>
+        <div class="sketchContainer">
+            <div id="sketchGrid">
+            </div>
+        </div>
+    </div>
+    <script src="soro.js"></script>
+</body>
+</html>

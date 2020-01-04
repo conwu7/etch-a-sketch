@@ -1,0 +1,81 @@
+body {
+    margin: 0;
+    font-family: 'Kulim Park', sans-serif;
+    background-color: antiquewhite;
+}
+
+.heading {
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.heading h1 {
+    display: block;
+    margin: 10px 10px 30px;
+    border-bottom: 3px red solid;
+    padding-bottom: 15px;
+}
+
+.controlsContainer {
+    display: inline-block;
+    width: 39%;
+    float: left;
+}
+
+.controlsContainer *{
+    margin: 10px 20px;
+}
+
+.controlsContainer button {
+    font-size: 14px;
+    border-radius: 7px;
+    background-color: lightslategray;
+    margin-left: 20px;
+    margin-right: 0px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.controlsContainer p {
+    display: block;
+    background-color: yellow;
+    padding: 5px;
+}
+
+#clearbtn {
+    background-color: coral;
+    font-size: 16px;
+    padding: 5px 15px;
+}
+
+.controlsContainer input {
+    font-size: 14px;
+    border-radius: 8px;
+}
+
+#spanOne {
+    margin-left: 10px;
+    margin-right: 5px;
+}
+
+#spanTwo {
+    margin-left: 5px;
+}
+
+.sketchContainer {
+    display: inline-block;
+    width: 59%;
+    text-align: center;
+    float: right;
+    border-left: 3px red solid;
+
+}
+
+#sketchGrid {
+    margin-left: 100px;
+}
+
+.noneDisplay {
+    display: none;
+}
