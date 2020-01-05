@@ -130,3 +130,11 @@ button#clearbtn {
 #rangeContainer {
     margin: 20px 20px 10px;
 }
+
+.controlsContainer br {
+    display:block;
+    content:"";
+    margin-top:5em;
+    line-height:190%;
+    vertical-align:top;
+}
