@@ -16,6 +16,8 @@ let changeColorbutton = document.getElementById('changeColorbtn');
 let randomColorbutton = document.getElementById('randombtn');
 let blackbutton = document.getElementById('blackbtn');
 let clearbutton = document.getElementById('clearbtn');
+let eraserbutton = document.getElementById('erasebtn');
+
 
 
 //other variables
@@ -23,6 +25,11 @@ let sketchColor = '#ff0000';
 let gridSize = 35;
 let rainbowMode = false;
 let opacityMode = false;
+let eraseMode = false;
+let lastSketchColor = null;
+
+let john = 'john';
+console.log(`${john}`);
 
 let isMouseDown = false;
 
@@ -30,8 +37,8 @@ let isMouseDown = false;
 gridSizeInput.value = gridSize;
 document.getElementById('spanTwo').textContent = gridSize;
 
-sketchGrid.style.cssText = "display: grid; width: 550px; height: 400px;";
-sketchGrid.style.gridGap = '1px';
+sketchGrid.style.cssText = "display: grid; width: 900px; height: 900px;";
+sketchGrid.style.gridGap = '2px';
 
 colorPickerInput.style.textAlign = 'center';
 
@@ -49,14 +56,13 @@ function makeSquareGrid() {
     for (let i=0; i<(gridSize*gridSize); i++) {
         let newDiv = document.createElement('DIV');
         sketchGrid.appendChild(newDiv);
-        newDiv.style.backgroundColor = "antiquewhite";
-        newDiv.addEventListener("dblclick", setMouseDown);
+        newDiv.addEventListener("click", setMouseDown);
         newDiv.addEventListener('mouseenter', sketch);
         newDiv.setAttribute('id', `btn${i}`);
-        newDiv.style.transition = "600ms ease";
+        newDiv.style.backgroundColor = "ivory";
+        newDiv.style.transition = "300ms ease";
     }
 
-    clearGrid();
     document.getElementById("defaultSizeSpan").innerHTML = `${gridSize} by ${gridSize}`;
 }
 
@@ -72,8 +78,14 @@ function changeColorShowOptions() {
 function clearGrid() {
     let numberOfBoxes = gridSize * gridSize;
     for (let i=0; i< numberOfBoxes; i++) {
-        document.getElementById(`btn${i}`).style.cssText = "opacity: ; background-color: lightgray;"
+        document.getElementById(`btn${i}`).classList.add("clearDivsAnimation");
+        document.getElementById(`btn${i}`).classList.remove("clearDivsAnimation");
     }
+    for (let i=0; i< numberOfBoxes; i++) {
+        document.getElementById(`btn${i}`).style.opacity ="";
+        document.getElementById(`btn${i}`).style.backgroundColor = "ivory";
+    }
+    isMouseDown = false;
 }
 
 function getRandomColor() {
@@ -86,6 +98,10 @@ function getRandomColor() {
 }
 
 function changeColor(e) {
+    if (e.target.id == "colorPickerInput") {
+        eraseMode = false;
+        eraserbutton.classList.remove("modeActivated");
+    }
     rainbowMode = false;
     rainbowbutton.classList.remove("modeActivated");
     let targetId = e.target.id;
@@ -93,11 +109,12 @@ function changeColor(e) {
         case 'colorPickerInput':
             sketchColor = colorPickerInput.value;
             break;
-        case 'randombtn':
-            sketchColor = getRandomColor();
-            break;
-        default:
-            console.log('default');
+
+        case 'erasebtn':
+            if (eraseMode) {
+                sketchColor = 'ivory';
+                break;
+            }
     }
 }
 
@@ -129,7 +146,7 @@ function sketch(e) {
         rgbalpha = Number(e.target.style.opacity)
     }
 
-    if (opacityMode && rgbalpha < 1) {
+    if (opacityMode && rgbalpha < 1 && isMouseDown) {
         rgbalpha += 0.2;
         e.target.style.opacity = `${rgbalpha}`;
     }
@@ -149,6 +166,10 @@ function sizePicked() {
 }
 
 function rainbowModeFunc(e) {
+    if (eraseMode) {
+        eraseMode = false;
+        eraserbutton.classList.remove('modeActivated');
+    }
     switch (rainbowMode) {
         case true:
             rainbowMode = false;
@@ -166,6 +187,11 @@ function rainbowModeFunc(e) {
 }
 
 function opacityToggle(e) {
+    if (eraseMode) {
+        eraseMode = false;
+        eraserbutton.classList.remove('modeActivated');
+    }
+
     switch (opacityMode) {
         case true:
             opacityMode = false;
@@ -180,6 +206,31 @@ function opacityToggle(e) {
     }
 }
 
+function erase(e) {
+    if (opacityMode) {
+        opacityMode = false;
+        opacitybutton.classList.remove("modeActivated");
+    }
+    if (rainbowMode) {
+        rainbowMode = false;
+        rainbowbutton.classList.remove("modeActivated");
+    }
+
+    switch (eraseMode) {
+        case true:
+            eraseMode = false;
+            e.target.classList.remove("modeActivated");
+            sketchColor = lastSketchColor;
+            break;
+        case false:
+            eraseMode = true;
+            e.target.classList.add("modeActivated");
+            lastSketchColor = `${sketchColor}`;
+            break;
+    }
+    changeColor(e);
+}
+
 //event listeners
 clearbutton.addEventListener('click',clearGrid);
 saveRangebutton.addEventListener('click', changeGridSize);
@@ -187,3 +238,4 @@ gridSizeInput.addEventListener('mousemove', sizePicked);
 rainbowbutton.addEventListener('click', rainbowModeFunc);
 opacitybutton.addEventListener('click',opacityToggle);
 colorPickerInput.addEventListener('change', changeColor);
+eraserbutton.addEventListener('click',erase);

@@ -11,15 +11,15 @@ body {
 }
 
 .heading h1 {
-    display: block;
+
     margin: 10px 10px 30px;
     border-bottom: 3px red solid;
     padding-bottom: 15px;
-    text-align: right;
+    text-indent: -250px;
 }
 
 .mainBody {
-    min-width: 1280px;
+    min-width: 1880px;
 }
 
 .controlsContainer {
@@ -94,6 +94,8 @@ body {
 
 .modeContainer * {
     display: block;
+    text-align: center;
+    margin: auto;
 }
 
 .modeContainer button {
@@ -103,6 +105,8 @@ body {
     margin: 20px auto;
     border-radius: 8px;
     outline: none;
+    border: 1px yellow inset;
+    transition: 750ms ease;
 }
 
 button.modeActivated{
@@ -125,7 +129,7 @@ button#clearbtn {
 #bottomBorder {
     display: block;
     border-top: 3px red solid;
-    margin-top: 30px;
+    margin-top: 40px;
 }
 #rangeContainer {
     margin: 20px 20px 10px;
@@ -137,4 +141,9 @@ button#clearbtn {
     margin-top:5em;
     line-height:190%;
     vertical-align:top;
+}
+
+#sketchGrid .clearDivsAnimation {
+    transition: 2000ms ease-in-out;
+    background-color: #05060A;
 }
