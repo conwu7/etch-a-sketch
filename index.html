@@ -12,25 +12,28 @@
     </div>
     <div class="mainBody">
         <div class="controlsContainer">
-            <p>Sketch Grid Size: <span>Default Grid Size</span></p>
-            <button type="button" id="changeGridbtn">Change</button>
-            <span id="spanOne">1px</span>
-            <input type="range" id="gridRange" name="gridRange" min="1" max="50">
-            <span id="spanTwo">50px</span>
-            <button type="button" id="saveRange">Apply</button>
-            <p>Color: <span>Default Color</span></p>
-            <button type="button" id="changeColorbtn">Change</button>
-            <button type="button" id="blackbtn">Black</button>
-            <button type="button" id="randombtn">Random</button>
-            <button type="button" id="rainbowbtn">Rainbow</button>
-            <br>
-            <button type="button" id="clearbtn">Clear Grid</button>
+            <p>Sketch Grid Size: <span id="defaultSizeSpan">Default Grid Size</span></p>
+            <div id="rangeContainer">
+                <span id="spanOne">1</span>
+                <input type="range" id="gridRange" name="gridRange" min="1" max="100">
+                <span id="spanTwo">50px</span>
+                <button type="button" id="saveRangebtn">Apply</button>
+            </div>
+            <p id="colorChoice">Color: </p>
+            <input class="jscolor {required:false, hash:true, closable:true,closeText:'Close!'}" value="ff0000" id="colorPickerInput">
         </div>
         <div class="sketchContainer">
             <div id="sketchGrid">
             </div>
         </div>
+        <div class="modeContainer">
+            <button type="button" id="rainbowbtn">Rainbow</button>
+            <button type="button" id="opacitybtn">Opacity Mode</button>
+            <button type="button" id="clearbtn">Clear Grid</button>
+        </div>
     </div>
+    <div id="bottomBorder"></div>
     <script src="soro.js"></script>
+    <script src="jscolor.js"></script>
 </body>
 </html>

@@ -1,32 +1,48 @@
-let buttons = document.querySelectorAll("button");
-let gridSizeInput = document.getElementById('gridRange');
+let buttons = document.querySelectorAll(".controlsContainer button");
 
-for (let i=0; i<buttons.length; i++) {
-    let btn = buttons[i].id;
-    if (btn != 'clearbtn' && btn != 'changeGridbtn' && btn!='changeColorbtn') {
-        buttons[i].style.visibility = 'hidden';
-        gridSizeInput.style.visibility='hidden';
-        document.getElementById('spanOne').style.visibility = 'hidden';
-        document.getElementById('spanTwo').style.visibility = 'hidden';
-
-    }
-}
-
-let sketchColor = 'red';
-let gridSize = 50;
-let colorMode = 'default';
-
+//divs
 let sketchGrid = document.getElementById('sketchGrid');
-sketchGrid.style.cssText = "display: grid; width: 500px; height: 500px";
 
+//inputs
+let gridSizeInput = document.getElementById('gridRange');
+let colorPickerInput = document.getElementById('colorPickerInput');
+
+//buttons
+let opacitybutton = document.getElementById('opacitybtn');
+let rainbowbutton = document.getElementById('rainbowbtn');
+let changeGridbutton = document.getElementById('changeGridbtn');
+let saveRangebutton = document.getElementById('saveRangebtn');
+let changeColorbutton = document.getElementById('changeColorbtn');
+let randomColorbutton = document.getElementById('randombtn');
+let blackbutton = document.getElementById('blackbtn');
+let clearbutton = document.getElementById('clearbtn');
+
+
+//other variables
+let sketchColor = '#ff0000';
+let gridSize = 35;
+let rainbowMode = false;
+let opacityMode = false;
+
+//initializations
+gridSizeInput.value = gridSize;
+document.getElementById('spanTwo').textContent = gridSize;
+
+sketchGrid.style.cssText = "display: grid; width: 550px; height: 400px;";
+sketchGrid.style.gridGap = '1px';
+
+colorPickerInput.style.textAlign = 'center';
 
 makeSquareGrid();
 
-
+//functions
 function makeSquareGrid() {
-    let squareLength = parseInt(sketchGrid.style.width)/gridSize;
-    sketchGrid.style.gridTemplateColumns = `repeat(${gridSize},1fr)`;
-    sketchGrid.style.gridTemplateRows = `repeat(${gridSize},1fr)`;
+    while (sketchGrid.firstChild) {
+        sketchGrid.removeChild(sketchGrid.firstChild);
+    }
+    sketchGrid.style.gridTemplateColumns = `repeat(${gridSize},auto)`;
+    sketchGrid.style.gridTemplateRows = `repeat(${gridSize},auto)`;
+
 
     for (let i=0; i<(gridSize*gridSize); i++) {
         let newDiv = document.createElement('DIV');
@@ -34,43 +50,27 @@ function makeSquareGrid() {
         newDiv.style.backgroundColor = "antiquewhite";
         newDiv.addEventListener('mouseenter', sketch);
         newDiv.setAttribute('id', `btn${i}`);
+        newDiv.style.transition = "600ms ease";
     }
 
     clearGrid();
-
-}
-
-function changeGridShowRange() {
-    document.getElementsByTagName('input')[0].style.visibility = 'visible';
-    document.getElementById('spanOne').style.visibility = 'visible';
-    document.getElementById('spanTwo').style.visibility = 'visible';
-    document.getElementById('saveRange').style.visibility = 'visible';
-}
-
-function changeColorShowOptions() {
-    for (let i=0; i<buttons.length; i++) {
-        let btn = buttons[i].id;
-        if (btn != 'clearbtn' && btn != 'changeGridbtn' && btn != 'changeColorbtn' &&  btn!='saveRange') {
-            buttons[i].style.visibility = 'visible';
-        }
-    }
-    buttons[2].style.display = 'none';
-}
-
-function clearGrid() {
-    let numberOfBoxes = gridSize * gridSize;
-    for (let i=0; i< numberOfBoxes; i++) {
-        document.getElementById(`btn${i}`).style.backgroundColor = "lightgray";
-    }
+    document.getElementById("defaultSizeSpan").innerHTML = `${gridSize} by ${gridSize}`;
 }
 
 function changeGridSize(e) {
     gridSize = gridSizeInput.value;
     makeSquareGrid();
-    document.getElementById('spanOne').style.visibility = 'hidden';
-    document.getElementById('spanTwo').style.visibility = 'hidden';
-    gridSizeInput.style.visibility = 'hidden';
-    document.getElementById('saveRange').style.visibility = 'hidden';
+}
+
+function changeColorShowOptions() {
+
+}
+
+function clearGrid() {
+    let numberOfBoxes = gridSize * gridSize;
+    for (let i=0; i< numberOfBoxes; i++) {
+        document.getElementById(`btn${i}`).style.cssText = "opacity: ; background-color: lightgray;"
+    }
 }
 
 function getRandomColor() {
@@ -83,56 +83,84 @@ function getRandomColor() {
 }
 
 function changeColor(e) {
+    rainbowMode = false;
+    rainbowbutton.classList.remove("modeActivated");
     let targetId = e.target.id;
     switch (targetId) {
-        case 'blackbtn':
-            sketchColor='black';
+        case 'colorPickerInput':
+            sketchColor = colorPickerInput.value;
             break;
         case 'randombtn':
-            sketchColor=getRandomColor();
+            sketchColor = getRandomColor();
             break;
         default:
-            sketchColor='green';
-    }
-    buttons[2].style.display = 'inline';
-    for (let i=0; i<buttons.length; i++) {
-        let btn = buttons[i].id;
-        if (btn != 'clearbtn' && btn != 'changeGridbtn' && btn != 'changeColorbtn') {
-            buttons[i].style.visibility = 'hidden';
-        }
+            console.log('default');
     }
 }
 
 function sketch(e) {
-    e.preventDefault();
-    if (colorMode == 'rainbow') {
+    let rgbalpha;
+    if (rainbowMode) {
         sketchColor = getRandomColor();
+    }
+
+    if (!e.target.style.opacity) {
+        rgbalpha = 0;
+    } else {
+        rgbalpha = Number(e.target.style.opacity)
+    }
+
+    if (opacityMode && rgbalpha < 1) {
+        rgbalpha += 0.2;
+        e.target.style.opacity = `${rgbalpha}`;
+    }
+
+    if (!opacityMode) {
+        e.target.style.opacity = '1';
     }
     e.target.style.backgroundColor = sketchColor;
 }
 
 function sizePicked() {
     document.getElementById('spanTwo').textContent = gridSizeInput.value;
-    document.getElementById('spanTwo').textContent += 'px';
 }
 
-function rainbowMode() {
-    colorMode='rainbow';
-    buttons[2].style.display = 'inline';
-    for (let i=0; i<buttons.length; i++) {
-        let btn = buttons[i].id;
-        if (btn != 'clearbtn' && btn != 'changeGridbtn' && btn != 'changeColorbtn') {
-            buttons[i].style.visibility = 'hidden';
-        }
+function rainbowModeFunc(e) {
+    switch (rainbowMode) {
+        case true:
+            rainbowMode = false;
+            e.target.classList.remove("modeActivated");
+            colorPickerInput.value = sketchColor;
+            break;
+        case false:
+            rainbowMode = true;
+            e.target.classList.add("modeActivated");
+            colorPickerInput.value = 'click here'
+            colorPickerInput.style.backgroundColor = 'white';
+            colorPickerInput.style.color = "coral";
+            break;
     }
-    document.getElementById('rainbowbtn').style.visibility = 'hidden';
 }
 
-buttons[0].addEventListener('click', changeGridShowRange);
-buttons[2].addEventListener('click', changeColorShowOptions);
-buttons[3].addEventListener('click', changeColor);
-buttons[4].addEventListener('click', changeColor);
-buttons[6].addEventListener('click',clearGrid);
-buttons[1].addEventListener('click', changeGridSize);
+function opacityToggle(e) {
+    switch (opacityMode) {
+        case true:
+            opacityMode = false;
+            e.target.classList.remove("modeActivated");
+            break;
+        case false:
+            opacityMode = true;
+            e.target.classList.add("modeActivated");
+            break;
+        default:
+            console.log('mode found');
+    }
+}
+
+//event listeners
+clearbutton.addEventListener('click',clearGrid);
+saveRangebutton.addEventListener('click', changeGridSize);
 gridSizeInput.addEventListener('mousemove', sizePicked);
-buttons[5].addEventListener('click', rainbowMode);
+rainbowbutton.addEventListener('click', rainbowModeFunc);
+opacitybutton.addEventListener('click',opacityToggle);
+colorPickerInput.addEventListener('change', changeColor);
