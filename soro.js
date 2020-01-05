@@ -24,6 +24,8 @@ let gridSize = 35;
 let rainbowMode = false;
 let opacityMode = false;
 
+let isMouseDown = false;
+
 //initializations
 gridSizeInput.value = gridSize;
 document.getElementById('spanTwo').textContent = gridSize;
@@ -48,6 +50,7 @@ function makeSquareGrid() {
         let newDiv = document.createElement('DIV');
         sketchGrid.appendChild(newDiv);
         newDiv.style.backgroundColor = "antiquewhite";
+        newDiv.addEventListener("dblclick", setMouseDown);
         newDiv.addEventListener('mouseenter', sketch);
         newDiv.setAttribute('id', `btn${i}`);
         newDiv.style.transition = "600ms ease";
@@ -98,7 +101,23 @@ function changeColor(e) {
     }
 }
 
+function setMouseDown() {
+    switch (isMouseDown) {
+        case false:
+            isMouseDown = true;
+            break;
+        case true:
+            isMouseDown = false;
+    }
+}
+
+function setMouseUp() {
+    isMouseDown = false;
+}
+
+
 function sketch(e) {
+    e.preventDefault();
     let rgbalpha;
     if (rainbowMode) {
         sketchColor = getRandomColor();
@@ -118,7 +137,11 @@ function sketch(e) {
     if (!opacityMode) {
         e.target.style.opacity = '1';
     }
-    e.target.style.backgroundColor = sketchColor;
+
+    if (isMouseDown) {
+        e.target.style.backgroundColor = sketchColor;
+    }
+
 }
 
 function sizePicked() {
